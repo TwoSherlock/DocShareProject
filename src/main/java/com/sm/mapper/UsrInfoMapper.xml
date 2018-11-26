@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.mapper.UsrInfoMapper">
+  <resultMap id="BaseResultMap" type="com.sm.po.UsrInfo">
+    <id column="USR_ID" jdbcType="INTEGER" property="usrId" />
+    <result column="USR_NM" jdbcType="VARCHAR" property="usrNm" />
+    <result column="USR_PWD" jdbcType="VARCHAR" property="usrPwd" />
+    <result column="ST" jdbcType="CHAR" property="st" />
+    <result column="CRTR" jdbcType="VARCHAR" property="crtr" />
+    <result column="CRTM" jdbcType="TIMESTAMP" property="crtm" />
+    <result column="UPDTR" jdbcType="VARCHAR" property="updtr" />
+    <result column="UPDTM" jdbcType="TIMESTAMP" property="updtm" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    USR_ID, USR_NM, USR_PWD, ST, CRTR, CRTM, UPDTR, UPDTM
+  </sql>
+  <select id="selectByExample" parameterType="com.sm.po.UsrInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from usr_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from usr_info
+    where USR_ID = #{usrId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from usr_info
+    where USR_ID = #{usrId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sm.po.UsrInfoExample">
+    delete from usr_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sm.po.UsrInfo">
+    insert into usr_info (USR_ID, USR_NM, USR_PWD, 
+      ST, CRTR, CRTM, UPDTR, 
+      UPDTM)
+    values (#{usrId,jdbcType=INTEGER}, #{usrNm,jdbcType=VARCHAR}, #{usrPwd,jdbcType=VARCHAR}, 
+      #{st,jdbcType=CHAR}, #{crtr,jdbcType=VARCHAR}, #{crtm,jdbcType=TIMESTAMP}, #{updtr,jdbcType=VARCHAR}, 
+      #{updtm,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sm.po.UsrInfo">
+    insert into usr_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="usrId != null">
+        USR_ID,
+      </if>
+      <if test="usrNm != null">
+        USR_NM,
+      </if>
+      <if test="usrPwd != null">
+        USR_PWD,
+      </if>
+      <if test="st != null">
+        ST,
+      </if>
+      <if test="crtr != null">
+        CRTR,
+      </if>
+      <if test="crtm != null">
+        CRTM,
+      </if>
+      <if test="updtr != null">
+        UPDTR,
+      </if>
+      <if test="updtm != null">
+        UPDTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="usrId != null">
+        #{usrId,jdbcType=INTEGER},
+      </if>
+      <if test="usrNm != null">
+        #{usrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="usrPwd != null">
+        #{usrPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="st != null">
+        #{st,jdbcType=CHAR},
+      </if>
+      <if test="crtr != null">
+        #{crtr,jdbcType=VARCHAR},
+      </if>
+      <if test="crtm != null">
+        #{crtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updtr != null">
+        #{updtr,jdbcType=VARCHAR},
+      </if>
+      <if test="updtm != null">
+        #{updtm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sm.po.UsrInfoExample" resultType="java.lang.Long">
+    select count(*) from usr_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update usr_info
+    <set>
+      <if test="record.usrId != null">
+        USR_ID = #{record.usrId,jdbcType=INTEGER},
+      </if>
+      <if test="record.usrNm != null">
+        USR_NM = #{record.usrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usrPwd != null">
+        USR_PWD = #{record.usrPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.st != null">
+        ST = #{record.st,jdbcType=CHAR},
+      </if>
+      <if test="record.crtr != null">
+        CRTR = #{record.crtr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crtm != null">
+        CRTM = #{record.crtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updtr != null">
+        UPDTR = #{record.updtr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updtm != null">
+        UPDTM = #{record.updtm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update usr_info
+    set USR_ID = #{record.usrId,jdbcType=INTEGER},
+      USR_NM = #{record.usrNm,jdbcType=VARCHAR},
+      USR_PWD = #{record.usrPwd,jdbcType=VARCHAR},
+      ST = #{record.st,jdbcType=CHAR},
+      CRTR = #{record.crtr,jdbcType=VARCHAR},
+      CRTM = #{record.crtm,jdbcType=TIMESTAMP},
+      UPDTR = #{record.updtr,jdbcType=VARCHAR},
+      UPDTM = #{record.updtm,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sm.po.UsrInfo">
+    update usr_info
+    <set>
+      <if test="usrNm != null">
+        USR_NM = #{usrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="usrPwd != null">
+        USR_PWD = #{usrPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="st != null">
+        ST = #{st,jdbcType=CHAR},
+      </if>
+      <if test="crtr != null">
+        CRTR = #{crtr,jdbcType=VARCHAR},
+      </if>
+      <if test="crtm != null">
+        CRTM = #{crtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updtr != null">
+        UPDTR = #{updtr,jdbcType=VARCHAR},
+      </if>
+      <if test="updtm != null">
+        UPDTM = #{updtm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where USR_ID = #{usrId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sm.po.UsrInfo">
+    update usr_info
+    set USR_NM = #{usrNm,jdbcType=VARCHAR},
+      USR_PWD = #{usrPwd,jdbcType=VARCHAR},
+      ST = #{st,jdbcType=CHAR},
+      CRTR = #{crtr,jdbcType=VARCHAR},
+      CRTM = #{crtm,jdbcType=TIMESTAMP},
+      UPDTR = #{updtr,jdbcType=VARCHAR},
+      UPDTM = #{updtm,jdbcType=TIMESTAMP}
+    where USR_ID = #{usrId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -132,28 +132,14 @@
                 $("#right_hand").attr("style","right:-112px;top:-12px");
             });
         });
-
-        function checkForm(){
-            var userName=$("#userName").val();
-            var password=$("#password").val();
-            if(userName==null||userName==""){
-                $("#error").html("用户名不能为空！");
-                return false;
-            }
-            if(password==null||password==""){
-                $("#error").html("密码不能为空！");
-                return false;
-            }
-            return true;
-        }
     </SCRIPT>
 </head>
 <body>
 
 <DIV class="top_div">
 </DIV>
-<form action="${pageContext.request.contextPath}/login.do" method="post" onsubmit="return checkForm()">
-    <DIV style="background: rgb(255, 255, 255); margin: -100px auto auto; border: 1px solid rgb(231, 231, 231); border-image: none; width: 400px; height: 200px; text-align: center;">
+<form id="formlogin" action="login" method="post" onsubmit="return false">
+    <DIV style="background: rgb(255, 255, 255); margin: -180px auto auto; border: 1px solid rgb(231, 231, 231); border-image: none; width: 400px; height: 215px; text-align: center;">
         <DIV style="width: 165px; height: 96px; position: absolute;">
             <DIV class="tou">
             </DIV>
@@ -164,18 +150,18 @@
         </DIV>
         <P style="padding: 30px 0px 10px; position: relative;">
             <SPAN class="u_logo"></SPAN>
-            <INPUT id="userName" name="userName" class="ipt" type="text" placeholder="请输入用户名" value="${user.username }">
+            <INPUT id="userName" name="usrNm" class="ipt" type="text" placeholder="请输入用户名" >
         </P>
         <P style="position: relative;">
             <SPAN class="p_logo"></SPAN>
-            <INPUT id="password" name="password" class="ipt"  type="password" placeholder="请输入密码" value="${user.password }">
+            <INPUT id="password" name="usrPwd" class="ipt"  type="password" placeholder="请输入密码" >
         </P>
-        <DIV style="height: 50px; line-height: 50px; margin-top: 30px; border-top-color: rgb(231, 231, 231); border-top-width: 1px; border-top-style: solid;">
+        <DIV style="height: 50px; line-height: 50px; margin-top: 3px; border-top-color: rgb(231, 231, 231); border-top-width: 1px; border-top-style: solid;">
             <P style="margin: 0px 35px 20px 45px;">
-                <SPAN style="float: left;">后台管理工作平台</SPAN>
-                <span><font color="red" id="error">${errorInfo }</font></span>
+                <SPAN style="float: left;">DocShare</SPAN>
+                <span><font color="red" id="error"></font></span>
                 <SPAN style="float: right;">
-	              <input type="submit" style="background: rgb(0, 142, 173); padding: 7px 10px; border-radius: 4px; border: 1px solid rgb(26, 117, 152); border-image: none; color: rgb(255, 255, 255); font-weight: bold;" value="登录"/>
+	              <input  id="loginsubmit" type="submit" style="background: rgb(0, 142, 173); padding: 7px 10px; border-radius: 4px; border: 1px solid rgb(26, 117, 152); border-image: none; color: rgb(255, 255, 255); font-weight: bold;" value="登录"/>
 	         </SPAN>
             </P>
         </DIV>
@@ -189,7 +175,76 @@
 
 <img id="zhuochong" src="/img/zc.gif">
 </body>
+<!-- 表单提交 -->
+<script type="text/javascript">
 
+    <!-- serialize转Object -->
+    $.fn.serializeObject = function()
+    {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+    var redirectUrl = "http://127.0.0.1:8080/";
+    var LOGIN = {
+        checkInput:function() {
+            if ($("#userName").val() == "") {
+                $("#error").html("用户名不能为空！");
+                $("#userName").focus();
+                return false;
+            }
+            if ($("#password").val() == "") {
+                $("#error").html("密码不能为空！");
+                $("#password").focus();
+                return false;
+            }
+            return true;
+        },
+        doLogin:function() {
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify($("#formlogin").serializeObject()),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 200) {
+                        $("#error").html("登录成功！")
+                        location.href = "http://localhost:8080/home";
+                    } else {
+                        $("#error").html(data.msg);
+                        $("#userName").select();
+                    }
+                },
+                error: function (data) {
+                    $("#error").html("网络异常");
+                }
+            });
+        },
+        login:function() {
+            if (this.checkInput()) {
+                this.doLogin();
+            }
+        }
+
+    };
+    $(function(){
+        $("#loginsubmit").click(function(){
+            LOGIN.login();
+        });
+    });
+</script>
 <!-- 底部走动的桌宠style -->
 <style>
     #zhuochong{position: fixed;z-index: 999999;bottom:0;left:-100px;opacity: 0.9;transform:scaleX(-1);animation-direction: alternate;animation-timing-function: linear;}

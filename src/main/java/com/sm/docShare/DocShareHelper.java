@@ -4,5 +4,6 @@ package com.sm.docShare;
  * DaocShare帮助类
  */
 public class DocShareHelper {
-    public static final String solt = "DocSahare";
+    //加密盐值
+    public static final String solt = "DocShare";
 }

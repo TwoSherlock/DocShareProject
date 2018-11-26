@@ -16,4 +16,13 @@ public class SmParentController {
         String className = this.getClass().getName();
         logger.info(className+"："+logMsg);
     }
+
+    /**
+     * 打印出类的日志信息,error级别
+     * @param logMsg
+     */
+    public void logError(String logMsg){
+        String className = this.getClass().getName();
+        logger.error(className+"："+logMsg);
+    }
 }
