@@ -4,6 +4,7 @@ import com.sm.common.DocShareMessage;
 import com.sm.docShare.DocShareHelper;
 import com.sm.po.UsrInfo;
 import com.sm.service.LoginService;
+import com.sm.util.MD5Util;
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -30,12 +31,10 @@ public class LoginController extends  SmParentController{
     @ResponseBody
     public DocShareMessage login(@RequestBody String json){
         try{
+            logInfo("登录传参为："+json);
             UsrInfo usrInfo = gson.fromJson(json,UsrInfo.class);
             String usrPwd = usrInfo.getUsrPwd();
-            MessageDigest md5= MessageDigest.getInstance("MD5");
-            BASE64Encoder encoder = new BASE64Encoder();
-            String encode = encoder.encode(md5.digest(usrPwd.getBytes("utf-8")))+DocShareHelper.solt;
-            String md5Pwd = encoder.encode(md5.digest(encode.getBytes("utf-8")));
+            String md5Pwd = MD5Util.md5SoltGenerator(usrPwd);
             usrInfo.setUsrPwd(md5Pwd);
             boolean login = loginService.login(usrInfo);
             if(login){

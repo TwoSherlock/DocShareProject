@@ -10,6 +10,7 @@
     <result column="CRTM" jdbcType="TIMESTAMP" property="crtm" />
     <result column="UPDTR" jdbcType="VARCHAR" property="updtr" />
     <result column="UPDTM" jdbcType="TIMESTAMP" property="updtm" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    USR_ID, USR_NM, USR_PWD, ST, CRTR, CRTM, UPDTR, UPDTM
+    USR_ID, USR_NM, USR_PWD, ST, CRTR, CRTM, UPDTR, UPDTM, EMAIL
   </sql>
   <select id="selectByExample" parameterType="com.sm.po.UsrInfoExample" resultMap="BaseResultMap">
     select
@@ -106,10 +107,10 @@
   <insert id="insert" parameterType="com.sm.po.UsrInfo">
     insert into usr_info (USR_ID, USR_NM, USR_PWD, 
       ST, CRTR, CRTM, UPDTR, 
-      UPDTM)
+      UPDTM, EMAIL)
     values (#{usrId,jdbcType=INTEGER}, #{usrNm,jdbcType=VARCHAR}, #{usrPwd,jdbcType=VARCHAR}, 
       #{st,jdbcType=CHAR}, #{crtr,jdbcType=VARCHAR}, #{crtm,jdbcType=TIMESTAMP}, #{updtr,jdbcType=VARCHAR}, 
-      #{updtm,jdbcType=TIMESTAMP})
+      #{updtm,jdbcType=TIMESTAMP}, #{email,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sm.po.UsrInfo">
     insert into usr_info
@@ -138,6 +139,9 @@
       <if test="updtm != null">
         UPDTM,
       </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="usrId != null">
@@ -163,6 +167,9 @@
       </if>
       <if test="updtm != null">
         #{updtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -199,6 +206,9 @@
       <if test="record.updtm != null">
         UPDTM = #{record.updtm,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -213,7 +223,8 @@
       CRTR = #{record.crtr,jdbcType=VARCHAR},
       CRTM = #{record.crtm,jdbcType=TIMESTAMP},
       UPDTR = #{record.updtr,jdbcType=VARCHAR},
-      UPDTM = #{record.updtm,jdbcType=TIMESTAMP}
+      UPDTM = #{record.updtm,jdbcType=TIMESTAMP},
+      EMAIL = #{record.email,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -242,6 +253,9 @@
       <if test="updtm != null">
         UPDTM = #{updtm,jdbcType=TIMESTAMP},
       </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
     </set>
     where USR_ID = #{usrId,jdbcType=INTEGER}
   </update>
@@ -253,7 +267,8 @@
       CRTR = #{crtr,jdbcType=VARCHAR},
       CRTM = #{crtm,jdbcType=TIMESTAMP},
       UPDTR = #{updtr,jdbcType=VARCHAR},
-      UPDTM = #{updtm,jdbcType=TIMESTAMP}
+      UPDTM = #{updtm,jdbcType=TIMESTAMP},
+      EMAIL = #{email,jdbcType=VARCHAR}
     where USR_ID = #{usrId,jdbcType=INTEGER}
   </update>
 </mapper>

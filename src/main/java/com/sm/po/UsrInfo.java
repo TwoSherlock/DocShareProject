@@ -19,6 +19,8 @@ public class UsrInfo {
 
     private Date updtm;
 
+    private String email;
+
     public Integer getUsrId() {
         return usrId;
     }
@@ -81,5 +83,13 @@ public class UsrInfo {
 
     public void setUpdtm(Date updtm) {
         this.updtm = updtm;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
     }
 }

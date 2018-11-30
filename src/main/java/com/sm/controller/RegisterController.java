@@ -1,6 +1,7 @@
 package com.sm.controller;
 
 import com.sm.common.DocShareMessage;
+import com.sm.common.DocShareMsgException;
 import com.sm.docShare.DocShareHelper;
 import com.sm.po.UsrInfo;
 import com.sm.service.RegisterService;
@@ -9,32 +10,51 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sun.misc.BASE64Encoder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.MessageDigest;
+import java.util.Map;
 
 @Controller
-@RequestMapping(value="/",method = RequestMethod.POST)
+@RequestMapping(value="/")
 public class RegisterController extends SmParentController {
     @Autowired
     private RegisterService registerService;
 
+    @RequestMapping(value = "/registerPage",method = RequestMethod.GET)
+    public String register(HttpServletRequest req, HttpServletResponse rep){
+        return "register";
+    }
+
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public DocShareMessage UserRegister(@RequestBody String json){
+    @ResponseBody
+    public DocShareMessage userRegister(@RequestBody String json){
        try {
-           UsrInfo usrInfo = gson.fromJson(json,UsrInfo.class);
-           String usrPwd = usrInfo.getUsrPwd();
-           MessageDigest md5= MessageDigest.getInstance("MD5");
-           BASE64Encoder encoder = new BASE64Encoder();
-           String encode = encoder.encode(md5.digest(usrPwd.getBytes("utf-8")))+DocShareHelper.solt;
-           String md5Pwd = encoder.encode(md5.digest(encode.getBytes("utf-8")));
-           usrInfo.setUsrPwd(md5Pwd);
+           logInfo("注册接口入参:"+json);
+           Map<String,String> map = gson.fromJson(json, Map.class);
+           String usrNm = map.get("usrNm");
+           String usrPwd = map.get("usrPwd");
+           String usrPwd2 = map.get("usrPwd2");
+           String email = map.get("email");
+           String inviteCode = map.get("inviteCode");
+           registerService.checkData(usrNm,usrPwd,usrPwd2,email,inviteCode);
+           UsrInfo usrInfo = new UsrInfo();
+           usrInfo.setUsrNm(usrNm);
+           usrInfo.setUsrPwd(usrPwd);
+           usrInfo.setEmail(email);
            boolean register = registerService.register(usrInfo);
-           if(register){
+           if(register) {
                return DocShareMessage.ok("注册成功!");
            }else{
-               return DocShareMessage.build(400,"注册失败，请重新再试！");
+               return DocShareMessage.build(400,"注册失败！");
            }
+       }catch (DocShareMsgException e){
+           e.printStackTrace();
+           logError("注册接口发生错误!");
+           return DocShareMessage.build(400,e.getMsg());
        }catch (Exception e){
            e.printStackTrace();
            logError("注册接口发生错误!");
