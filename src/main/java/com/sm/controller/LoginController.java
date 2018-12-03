@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sun.misc.BASE64Encoder;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.lang.annotation.ElementType;
 import java.security.MessageDigest;
@@ -29,7 +32,7 @@ public class LoginController extends  SmParentController{
 
     @RequestMapping("/login")
     @ResponseBody
-    public DocShareMessage login(@RequestBody String json){
+    public DocShareMessage login(@RequestBody String json, HttpServletRequest request, HttpServletResponse response){
         try{
             logInfo("登录传参为："+json);
             UsrInfo usrInfo = gson.fromJson(json,UsrInfo.class);
@@ -37,6 +40,12 @@ public class LoginController extends  SmParentController{
             String md5Pwd = MD5Util.md5SoltGenerator(usrPwd);
             usrInfo.setUsrPwd(md5Pwd);
             boolean login = loginService.login(usrInfo);
+            String tokenValue = MD5Util.md5SoltGenerator(usrInfo.getUsrNm());
+            Cookie cookie = new Cookie(DocShareHelper.token,tokenValue);
+            logInfo("生成token："+tokenValue);
+            loginService.addToken(tokenValue);
+            cookie.setMaxAge(1800);//30min
+            response.addCookie(cookie);
             if(login){
                 return DocShareMessage.ok("登陆成功!");
             }else{

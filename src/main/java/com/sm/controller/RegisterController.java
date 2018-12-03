@@ -24,11 +24,6 @@ public class RegisterController extends SmParentController {
     @Autowired
     private RegisterService registerService;
 
-    @RequestMapping(value = "/registerPage",method = RequestMethod.GET)
-    public String register(HttpServletRequest req, HttpServletResponse rep){
-        return "register";
-    }
-
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     @ResponseBody
     public DocShareMessage userRegister(@RequestBody String json){
@@ -52,14 +47,32 @@ public class RegisterController extends SmParentController {
                return DocShareMessage.build(400,"注册失败！");
            }
        }catch (DocShareMsgException e){
-           e.printStackTrace();
            logError("注册接口发生错误!");
            return DocShareMessage.build(400,e.getMsg());
        }catch (Exception e){
            e.printStackTrace();
-           logError("注册接口发生错误!");
+           logError("注册接口发生未知错误!");
            return DocShareMessage.build(400,"未知错误!");
        }
+    }
+
+
+    @RequestMapping(value = "/invite",method = RequestMethod.POST)
+    @ResponseBody
+    public DocShareMessage userRegister(){
+        try {
+            logInfo("邀请注册接口被调用...:");
+            String inviteCode = registerService.generateInviteCode();
+            logInfo("生成的的邀请码为:"+inviteCode);
+            return DocShareMessage.ok(inviteCode);
+        }catch (DocShareMsgException e){
+            logError("生成邀请码时发生错误!");
+            return DocShareMessage.build(400,e.getMsg());
+        }catch (Exception e){
+            e.printStackTrace();
+            logError("邀请注册接口发生错误!");
+            return DocShareMessage.build(400,"未知错误!");
+        }
     }
 
 }
