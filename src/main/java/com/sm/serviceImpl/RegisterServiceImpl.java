@@ -8,6 +8,7 @@ import com.sm.po.UsrInfoExample;
 import com.sm.service.RegisterService;
 import com.sm.util.MD5Util;
 import com.sm.util.RedisUtil;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,6 +90,21 @@ public class RegisterServiceImpl implements RegisterService {
         criteria.andUsrNmEqualTo(usrNm);
         if(usrInfoMapper.countByExample(usrInfoExample)>0){
             throw new DocShareMsgException("用户名已被占用!");
+        }
+    }
+
+
+    @Override
+    public String generateInviteCode() throws DocShareMsgException {
+        String inviteCode = String.valueOf(RandomUtils.nextInt(100000, 999999));
+        String key = DocShareHelper.invitedkey+inviteCode;
+        boolean b = redisUtil.set(key, inviteCode);
+        redisUtil.expire(key,1800);//设置失效时间为半小时
+        if (b){
+            logger.info("redis中存储key:"+key);
+            return inviteCode;
+        }else{
+            throw new DocShareMsgException("非常抱歉,生成验证码失败!");
         }
     }
 }

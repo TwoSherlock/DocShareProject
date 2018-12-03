@@ -9,4 +9,10 @@ public interface LoginService {
      * @return
      */
     public boolean login(UsrInfo usrInfo);
+
+
+    /**
+     * 将token添加到redis
+     */
+    void addToken(String tokenValue);
 }
