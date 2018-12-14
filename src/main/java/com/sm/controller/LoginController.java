@@ -41,10 +41,15 @@ public class LoginController extends  SmParentController{
             usrInfo.setUsrPwd(md5Pwd);
             boolean login = loginService.login(usrInfo);
             String tokenValue = MD5Util.md5SoltGenerator(usrInfo.getUsrNm());
+            /*将盐值加密后的用户名作为value放入redis和cookie
+            *redis的存储格式为:  tokenValue,tokenValue
+            * cookie的存储格式为:DocShareHelper.token,tokenValue
+            * */
             Cookie cookie = new Cookie(DocShareHelper.token,tokenValue);
             logInfo("生成token："+tokenValue);
             loginService.addToken(tokenValue);
             cookie.setMaxAge(1800);//30min
+            cookie.setPath("/");
             response.addCookie(cookie);
             if(login){
                 return DocShareMessage.ok("登陆成功!");

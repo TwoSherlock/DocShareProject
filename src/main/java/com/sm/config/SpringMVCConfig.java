@@ -1,5 +1,6 @@
 package com.sm.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -47,11 +48,18 @@ public class SpringMVCConfig implements WebMvcConfigurer  {
 
     }
 
+
+    //将拦截器以bean的方式注入,解决拦截器中无法注入bean的问题
+    @Bean
+    public LoginInterceptor loginInterceptor() {
+        return new LoginInterceptor();
+    }
+
     //添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**")
-            .excludePathPatterns("/","login","registerPage","register");
+        registry.addInterceptor(loginInterceptor()).addPathPatterns("/**")
+            .excludePathPatterns("/","/login","/registerPage","/register","/error");
     }
 
     @Override
