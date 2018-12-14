@@ -20,4 +20,9 @@ public class PageController extends SmParentController {
     public String registerPage(HttpServletRequest req, HttpServletResponse rep){
         return "register";
     }
+
+    @RequestMapping(value = "/home",method = RequestMethod.GET)
+    public String homePage(HttpServletRequest req, HttpServletResponse rep){
+        return "../remu/Noname2";
+    }
 }
