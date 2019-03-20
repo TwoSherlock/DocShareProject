@@ -1,31 +1,135 @@
-<!doctype html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
- <head>
-  <meta charset="UTF-8">
-  <meta name="Generator" content="EditPlus®">
-  <meta name="Author" content="">
-  <meta name="Keywords" content="">
-  <meta name="Description" content="">
-  <link rel="stylesheet" href="remu/live2d/css/live2d.css" />
-  <title>Document</title>
- </head>
- <body>
-  <div id="landlord" style="right:5px;bottom:0px;">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TwoSherlock's Blog Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="remu/plug/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="remu/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="remu/css/offcanvas.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="remu/live2d/css/live2d.css" />
+    <title>B站评论抽奖</title>
+</head>
+
+<body>
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"  href="javascript:void(0)">B站评论抽奖</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="home/homeList.do">主页</a></li>
+            </ul>
+        </div><!-- /.nav-collapse -->
+    </div><!-- /.container -->
+</nav><!-- /.navbar -->
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+
+        <div class="col-xs-12 col-sm-9">
+            <p class="pull-right visible-xs">
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+            </p>
+            <div class="jumbotron">
+                <h1>欢迎浏览</h1>
+                <p>此博客分享的是我在学习过程中做的学习笔记，本页显示的是最近更新的6篇。</p>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-lg-4">
+                    <h2>${homeList[0].title }</h2>
+                    <p>${homeList[0].context }</p>
+                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[0].tid }" role="button">全文 &raquo;</a></p>
+                </div><!--/.col-xs-6.col-lg-4-->
+                <div class="col-xs-6 col-lg-4">
+                    <h2>${homeList[1].title }</h2>
+                    <p>${homeList[1].context }</p>
+                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[1].tid }" role="button">全文 &raquo;</a></p>
+                </div><!--/.col-xs-6.col-lg-4-->
+                <div class="col-xs-6 col-lg-4">
+                    <h2>${homeList[2].title }</h2>
+                    <p>${homeList[2].context }</p>
+                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[2].tid }" role="button">全文 &raquo;</a></p>
+                </div><!--/.col-xs-6.col-lg-4-->
+            </div><!--/row-->
+            <div class="row">
+                <div class="col-xs-6 col-lg-4">
+                    <h2>${homeList[3].title }</h2>
+                    <p>${homeList[3].context }</p>
+                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[3].tid }" role="button">全文 &raquo;</a></p>
+                </div><!--/.col-xs-6.col-lg-4-->
+                <div class="col-xs-6 col-lg-4">
+                    <h2>${homeList[4].title }</h2>
+                    <p>${homeList[4].context }</p>
+                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[4].tid }" role="button">全文 &raquo;</a></p>
+                </div><!--/.col-xs-6.col-lg-4-->
+                <div class="col-xs-6 col-lg-4">
+                    <h2>${homeList[5].title }</h2>
+                    <p>${homeList[5].context }</p>
+                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[5].tid }" role="button">全文 &raquo;</a></p>
+                </div><!--/.col-xs-6.col-lg-4-->
+            </div><!--/row-->
+        </div><!--/.col-xs-12.col-sm-9-->
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+            <div class="list-group">
+                <a href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=923703513&website=www.oicqzone.com" class="list-group-item">联系QQ：923703513</a>
+            </div>
+        </div><!--/.sidebar-offcanvas-->
+    </div><!--/row-->
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2018 TwoSherlock, Inc.</p>
+    </footer>
+
+</div><!--/.container-->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="remu/plug/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="plug/jquery-1.12.4.min.js"><\/script>')</script>
+<script src="remu/plug/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="remu/js/ie10-viewport-bug-workaround.js"></script>
+<script src="remu/js/offcanvas.js"></script>
+<!-- =======================================蕾姆挂件================================================ -->
+<div id="landlord" style="right:5px;bottom:0px;">
     <div class="message" style="opacity:0"></div>
     <canvas id="live2d" width="500" height="560" class="live2d"></canvas>
     <div class="live_talk_input_body">
-     <div class="live_talk_input_name_body">
-         <input name="name" type="text" class="live_talk_name white_input" id="AIuserName" autocomplete="off" placeholder="你的名字" />
+        <div class="live_talk_input_name_body">
+            <input name="name" type="text" class="live_talk_name white_input" id="AIuserName" autocomplete="off" placeholder="你的名字" />
         </div>
         <div class="live_talk_input_text_body">
-         <input name="talk" type="text" class="live_talk_talk white_input" id="AIuserText" autocomplete="off" placeholder="要和我聊什么呀？"/>
+            <input name="talk" type="text" class="live_talk_talk white_input" id="AIuserText" autocomplete="off" placeholder="要和我聊什么呀？"/>
             <button type="button" class="live_talk_send_btn" id="talk_send">发送</button>
         </div>
     </div>
     <input name="live_talk" id="live_talk" value="1" type="hidden" />
     <div class="live_ico_box">
-     <div class="live_ico_item type_info" id="showInfoBtn"></div>
-     <div class="live_ico_item type_talk" id="showTalkBtn"></div>
+        <div class="live_ico_item type_info" id="showInfoBtn"></div>
+        <div class="live_ico_item type_talk" id="showTalkBtn"></div>
         <div class="live_ico_item type_music" id="musicButton"></div>
         <div class="live_ico_item type_youdu" id="youduButton"></div>
         <div class="live_ico_item type_quit" id="hideButton"></div>
@@ -38,10 +142,11 @@
 <div id="open_live2d">召唤蕾姆</div>
 <script type="text/javascript" src="remu/jquery-1.12.4.min.js"></script>
 <script>
-var message_Path = 'remu/live2d/';//资源目录，如果目录不对请更改
-var talkAPI = "";//如果有类似图灵机器人的聊天接口请填写接口路径
+    var message_Path = 'remu/live2d/';//资源目录，如果目录不对请更改
+    var talkAPI = "";//如果有类似图灵机器人的聊天接口请填写接口路径
 </script>
 <script type="text/javascript" src="remu/live2d/js/live2d.js"></script>
 <script type="text/javascript" src="remu/live2d/js/message.js"></script>
- </body>
+<!-- =======================================蕾姆挂件================================================ -->
+</body>
 </html>

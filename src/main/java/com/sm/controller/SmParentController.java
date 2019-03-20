@@ -23,6 +23,6 @@ public class SmParentController {
      */
     public void logError(String logMsg){
         String className = this.getClass().getName();
-        logger.error(className+"："+logMsg);
+        logger.error(className+"：!ERROR;发生异常"+logMsg);
     }
 }
