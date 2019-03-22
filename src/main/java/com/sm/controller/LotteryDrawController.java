@@ -5,8 +5,10 @@ import com.sm.docShare.DocShareHelper;
 import com.sm.po.BiliBiliReplies;
 import com.sm.po.UsrInfo;
 import com.sm.service.LoginService;
+import com.sm.service.LotteryDrawService;
 import com.sm.serviceImpl.LotteryDrawServiceImpl;
 import com.sm.util.MD5Util;
+import com.sm.util.RedisUtil;
 import com.sm.webMagic.BilibiliWebMagicPageProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +28,7 @@ import java.util.*;
 public class LotteryDrawController extends  SmParentController{
 
     @Autowired
-    private LotteryDrawServiceImpl lotteryDrawServiceImpl;
+    private LotteryDrawService lotteryDrawService;
 
     @RequestMapping("/lotteryDrawList")
     @ResponseBody
@@ -34,12 +36,16 @@ public class LotteryDrawController extends  SmParentController{
         try{
             logInfo("抽奖名单接口传参为："+json);
             BiliBiliReplies bbr = gson.fromJson(json,BiliBiliReplies.class);
-            BilibiliWebMagicPageProcessor bwmpp = new BilibiliWebMagicPageProcessor();//创建一个爬虫对象
-            bwmpp.setOid(bbr.getAvId());//av号
-            bwmpp.setPageSize(bbr.getPageSize());//评论页数
-            bwmpp.setExcludeUsrs(bbr.getExcludeUsrs());//排除的用户名称
-            List<String> replyUserNames = bwmpp.getReplyUserNames();
-            return DocShareMessage.ok(lotteryDrawServiceImpl.getLuckyUsr(replyUserNames));
+            lotteryDrawService.clearRedisHash(bbr.getAvId());
+            BilibiliWebMagicPageProcessor bwmpp = new BilibiliWebMagicPageProcessor(bbr.getAvId(),bbr.getPageSize());//创建一个爬虫对象
+            bwmpp.setExcludeUsrs(bbr.getExcludeUsrs()==null?new String[]{}:bbr.getExcludeUsrs());//排除的用户名称,选填
+            bwmpp.getReplyUserNames();
+            List<Object> usrNmLists = lotteryDrawService.getreplyUsrs(bbr.getAvId());
+            String luckUsr = lotteryDrawService.getLuckUsr(usrNmLists);
+            Map<String, Object> result = new HashMap<String, Object>();
+            result.put("usrNmLists",usrNmLists);
+            result.put("luckUsr",luckUsr);
+            return DocShareMessage.ok(result);
         }catch (Exception e){
             e.printStackTrace();
             logError("抽奖名单接口发生错误!");

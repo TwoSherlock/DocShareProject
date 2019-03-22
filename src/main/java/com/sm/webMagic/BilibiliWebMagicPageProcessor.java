@@ -2,7 +2,13 @@ package com.sm.webMagic;
 
 import com.google.gson.Gson;
 import com.sm.po.BiliBiliReplies;
+import com.sm.service.LoginService;
+import com.sm.service.LotteryDrawService;
+import com.sm.serviceImpl.LotteryDrawServiceImpl;
+import com.sm.util.RedisUtil;
+import com.sm.util.SpringUtil;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -11,12 +17,23 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.JsonPathSelector;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 public class BilibiliWebMagicPageProcessor  implements PageProcessor {
-    private int pageSize = 1;
-    private String oid = "";
-    public static List<String> usrNmList = new ArrayList<String>();//用来保存所有评论用户的名称
+
+    private LotteryDrawService  lotteryDrawService = (LotteryDrawService) SpringUtil.getBean("lotteryDrawServiceImpl");
+    public int pageSize;
+    public static String oid;
     public String[] excludeUsrs = new String[]{};
+    public BilibiliWebMagicPageProcessor(){}
+    public BilibiliWebMagicPageProcessor(String oid,int pageSize){
+        this.oid = oid;
+        this.pageSize = pageSize;
+    }
 
     public String[] getExcludeUsrs() {
         return excludeUsrs;
@@ -42,18 +59,10 @@ public class BilibiliWebMagicPageProcessor  implements PageProcessor {
         this.oid = oid;
     }
 
-    public List<String> getUsrNmList() {
-        return usrNmList;
-    }
-
-    public void setUsrNmList(List<String> usrNmList) {
-        this.usrNmList = usrNmList;
-    }
-
     private Gson gson = new Gson();//json转换工具类
     private Site site = Site.me().setRetryTimes(3)//爬虫的相关配置
             .setTimeOut(30000)
-            .setSleepTime(1800)
+            .setSleepTime(1000)
             .setCycleRetryTimes(3)
             .setUseGzip(true)
             .addHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36")
@@ -66,14 +75,15 @@ public class BilibiliWebMagicPageProcessor  implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        Map<String, String> resultMap = new HashMap<String, String>();
+        Map<String, Object> resultMap = new Hashtable<String, Object>();
         //响应的结构中，member{}包含用户的mid和用户名
         List<String> members = new JsonPathSelector("$.data.replies[*].member").selectList(page.getRawText());
         for (String member : members) {
             BiliBiliReplies reply = gson.fromJson(member, BiliBiliReplies.class);
             resultMap.put(reply.getMid(),reply.getUname());//采用map去重
+            //存储到redis中(数据持久化)采用  av号-map<mid,uname>的hash类型存储
         }
-        usrNmList.addAll(resultMap.values());
+        lotteryDrawService.addRedisHash(this.oid, resultMap);
     }
 
     @Override
@@ -81,19 +91,10 @@ public class BilibiliWebMagicPageProcessor  implements PageProcessor {
         return site;
     }
 
-    public List<String> getReplyUserNames(){
-        usrNmList.clear();
+    public void getReplyUserNames(){
+        //一页1s
         for (int i = 1;i <= this.pageSize;i++){
             Spider.create(new BilibiliWebMagicPageProcessor()).addUrl("https://api.bilibili.com/x/v2/reply?pn="+i+"&type=1&oid="+this.oid).thread(1).run();
         }
-//        usrNmList.remove("TwoSherlock");//去除指定的评论
-        for(String excludeUsr :excludeUsrs){
-            usrNmList.remove(excludeUsr);
-        }
-//        Random random = new Random(new Date().getTime());//生成随机数
-//        int i = random.nextInt(list.size());
-//        String s = this.usrNmList.get(i);//取得用户列表中第i个
-//        System.out.println("恭喜用户  "+s+"  中奖！");
-        return usrNmList;
     }
 }

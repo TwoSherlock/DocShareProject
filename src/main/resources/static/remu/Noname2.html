@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>TwoSherlock's Blog Home</title>
+    <title>评论抽奖</title>
 
     <!-- Bootstrap core CSS -->
     <link href="remu/plug/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="home/homeList.do">主页</a></li>
+                <li class="active"><a href="#">主页</a></li>
             </ul>
         </div><!-- /.nav-collapse -->
     </div><!-- /.container -->
@@ -45,54 +45,36 @@
     <div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-12 col-sm-9">
-            <p class="pull-right visible-xs">
-                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
-            </p>
             <div class="jumbotron">
-                <h1>欢迎浏览</h1>
-                <p>此博客分享的是我在学习过程中做的学习笔记，本页显示的是最近更新的6篇。</p>
-            </div>
-            <div class="row">
-                <div class="col-xs-6 col-lg-4">
-                    <h2>${homeList[0].title }</h2>
-                    <p>${homeList[0].context }</p>
-                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[0].tid }" role="button">全文 &raquo;</a></p>
-                </div><!--/.col-xs-6.col-lg-4-->
-                <div class="col-xs-6 col-lg-4">
-                    <h2>${homeList[1].title }</h2>
-                    <p>${homeList[1].context }</p>
-                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[1].tid }" role="button">全文 &raquo;</a></p>
-                </div><!--/.col-xs-6.col-lg-4-->
-                <div class="col-xs-6 col-lg-4">
-                    <h2>${homeList[2].title }</h2>
-                    <p>${homeList[2].context }</p>
-                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[2].tid }" role="button">全文 &raquo;</a></p>
-                </div><!--/.col-xs-6.col-lg-4-->
-            </div><!--/row-->
-            <div class="row">
-                <div class="col-xs-6 col-lg-4">
-                    <h2>${homeList[3].title }</h2>
-                    <p>${homeList[3].context }</p>
-                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[3].tid }" role="button">全文 &raquo;</a></p>
-                </div><!--/.col-xs-6.col-lg-4-->
-                <div class="col-xs-6 col-lg-4">
-                    <h2>${homeList[4].title }</h2>
-                    <p>${homeList[4].context }</p>
-                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[4].tid }" role="button">全文 &raquo;</a></p>
-                </div><!--/.col-xs-6.col-lg-4-->
-                <div class="col-xs-6 col-lg-4">
-                    <h2>${homeList[5].title }</h2>
-                    <p>${homeList[5].context }</p>
-                    <p><a class="btn btn-default" href="home/more.do?tid=${homeList[5].tid }" role="button">全文 &raquo;</a></p>
-                </div><!--/.col-xs-6.col-lg-4-->
-            </div><!--/row-->
+                <br>根据视频的av号和评论的页数，获取该视频下的所有评论的用户名(评论楼层中的评论无效、重复盖楼只取一次)
+                <br>如果抽到up主，则重新抽...
+                <br>此外，用户 LOL666666666666 与 山火包 是up的同学，抽到他们的话也重新抽(😄)...
+                <br>
+                <br>
+                <div class="form-group">
+                    <label for="oid">要进行抽奖的视频av号:</label>
+                    <input type="text" class="form-control" id="oid" placeholder="AV号">
+                </div>
+                <div class="form-group">
+                    <label for="pageSize">该视频的评论页数:</label>
+                    <input type="text" class="form-control" id="pageSize" placeholder="评论页数">
+                </div>
+                <button type="button" class="btn btn-default" id = "getUsrsBtn">点击这里开始抓取评论用户</button>
+                <br>
+                <span style="color:#d9534f" id = "msg"></span>
+                <br>
+                <span  id = "usrNmSp"></span>
+                <br>
+                <button type="button" class="btn btn-default" id = "luckyUsrBtn">点这里，查看天选之子的名字~</button>
+                <span id="luckyUsrSp" style="display: none"></span>
+             <div>
         </div><!--/.col-xs-12.col-sm-9-->
 
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+        <!--<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
             <div class="list-group">
                 <a href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=923703513&website=www.oicqzone.com" class="list-group-item">联系QQ：923703513</a>
             </div>
-        </div><!--/.sidebar-offcanvas-->
+        </div>--><!--/.sidebar-offcanvas-->
     </div><!--/row-->
 
     <hr>
@@ -149,4 +131,44 @@
 <script type="text/javascript" src="remu/live2d/js/message.js"></script>
 <!-- =======================================蕾姆挂件================================================ -->
 </body>
+<script>
+    $("#luckyUsrBtn").click(function () {
+        $("#luckyUsrSp").show();
+    });
+    $("#getUsrsBtn").click(function(){
+        var avid = $("#oid").val();
+        var pageSize = $("#pageSize").val();
+        var param ={
+            "avId":""+avid+"",
+            "pageSize":""+pageSize+"",
+            "excludeUsrs":[]
+        }
+        $("#msg").html("正在抓取数据，请等待...")
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/lotteryDrawList",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(param),
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 200) {
+                    $("#msg").empty();
+                    $("#msg").html("抓取成功！参与评论的用户名如下：");
+                    var arr = data.data.usrNmLists;
+                    var str = ""
+                    $.each(arr, function(){
+                        str = str + "["+this+"]    ";
+                    });
+                    $("#usrNmSp").html(str);
+                    $("#luckyUsrSp").html("恭喜用户： "+data.data.luckUsr);
+                } else {
+                    alert("后台异常！");
+                }
+            },
+            error: function (data) {
+                alert("后台异常！");
+            }
+        });
+    })
+</script>
 </html>

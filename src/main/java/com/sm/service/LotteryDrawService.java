@@ -8,5 +8,12 @@ import java.util.Map;
 
 public interface LotteryDrawService {
 
-    public Map<String, Object> getLuckyUsr(List<String> replyUserNames);
+    public List<Object> getreplyUsrs(String oid);
+
+    public void addRedisHash(String oid, Map<String, Object> resultMap);
+
+    public void clearRedisHash(String oid);
+
+    public String getLuckUsr(List<Object> list);
+
 }
