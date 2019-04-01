@@ -59,7 +59,7 @@ public class SpringMVCConfig implements WebMvcConfigurer  {
     @Override
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(loginInterceptor()).addPathPatterns("/**")
-            .excludePathPatterns("/","/login","/registerPage","/register","/error","/lotteryDrawList");
+                .excludePathPatterns("/","/login","/registerPage","/register","/error","/lotteryDrawList");
     }
 
     @Override

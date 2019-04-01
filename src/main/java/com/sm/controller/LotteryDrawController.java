@@ -38,7 +38,7 @@ public class LotteryDrawController extends  SmParentController{
             BiliBiliReplies bbr = gson.fromJson(json,BiliBiliReplies.class);
             lotteryDrawService.clearRedisHash(bbr.getAvId());
             BilibiliWebMagicPageProcessor bwmpp = new BilibiliWebMagicPageProcessor(bbr.getAvId(),bbr.getPageSize());//创建一个爬虫对象
-            bwmpp.setExcludeUsrs(bbr.getExcludeUsrs()==null?new String[]{}:bbr.getExcludeUsrs());//排除的用户名称,选填
+//            bwmpp.setExcludeUsrs(bbr.getExcludeUsrs()==null?new String[]{}:bbr.getExcludeUsrs());
             bwmpp.getReplyUserNames();
             List<Object> usrNmLists = lotteryDrawService.getreplyUsrs(bbr.getAvId());
             String luckUsr = lotteryDrawService.getLuckUsr(usrNmLists);

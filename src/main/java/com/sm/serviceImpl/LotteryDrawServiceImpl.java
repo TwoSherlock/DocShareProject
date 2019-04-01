@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 @Service
@@ -15,7 +16,7 @@ public class LotteryDrawServiceImpl implements LotteryDrawService {
 
     private static final Logger logger = LoggerFactory.getLogger(LotteryDrawServiceImpl.class);
 
-    @Autowired
+    @Resource
     private RedisUtil redisUtil;
 
 

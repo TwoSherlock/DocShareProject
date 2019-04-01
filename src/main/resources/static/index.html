@@ -158,7 +158,7 @@
         </P>
         <DIV style="height: 50px; line-height: 50px; margin-top: 3px; border-top-color: rgb(231, 231, 231); border-top-width: 1px; border-top-style: solid;">
             <P style="margin: 0px 35px 20px 45px;">
-                <a href="http://127.0.0.1:8080/registerPage"><SPAN style="float: left;">注册</SPAN></a>
+                <a href="http://212.64.1.222:8080/registerPage"><SPAN style="float: left;">注册</SPAN></a>
                 <span><font color="red" id="error"></font></span>
                 <SPAN style="float: right;">
 	              <input  id="loginsubmit" type="submit" style="background: rgb(0, 142, 173); padding: 7px 10px; border-radius: 4px; border: 1px solid rgb(26, 117, 152); border-image: none; color: rgb(255, 255, 255); font-weight: bold;" value="登录"/>
@@ -175,6 +175,7 @@
 
 <img id="zhuochong" src="/img/zc.gif">
 </body>
+<script type="text/javascript" src="remu/js/url.js"></script>
 <!-- 表单提交 -->
 <script type="text/javascript">
 
@@ -196,7 +197,6 @@
         return o;
     };
 
-    var redirectUrl = "http://127.0.0.1:8080/";
     var LOGIN = {
         checkInput:function() {
             if ($("#userName").val() == "") {
@@ -221,7 +221,7 @@
                 success: function (data) {
                     if (data.status == 200) {
                         $("#error").html("登录成功！")
-                        location.href = "http://localhost:8080/home";
+                        location.href = redirectUrl+"home";
                     } else {
                         $("#error").html(data.msg);
                         $("#userName").select();
