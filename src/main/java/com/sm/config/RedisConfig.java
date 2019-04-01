@@ -33,8 +33,8 @@ public class RedisConfig {
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        // 开启事务
-        redisTemplate.setEnableTransactionSupport(true);
+        // 开启事务  此处不开启
+        redisTemplate.setEnableTransactionSupport(false);
         redisTemplate.setConnectionFactory(factory);
     }
     /**

@@ -131,6 +131,7 @@
 <script type="text/javascript" src="remu/live2d/js/message.js"></script>
 <!-- =======================================蕾姆挂件================================================ -->
 </body>
+<script type="text/javascript" src="remu/js/url.js"></script>
 <script>
     $("#luckyUsrBtn").click(function () {
         $("#luckyUsrSp").show();
@@ -146,7 +147,7 @@
         $("#msg").html("正在抓取数据，请等待...")
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/lotteryDrawList",
+            url: redirectUrl+"lotteryDrawList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(param),
             dataType: "json",

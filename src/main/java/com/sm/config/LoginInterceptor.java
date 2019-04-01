@@ -30,7 +30,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         Cookie[] cookies = httpServletRequest.getCookies();
         if(cookies==null){
             logger.info("没有获取到登录信息");
-            httpServletResponse.sendRedirect("../index");
+            httpServletResponse.sendRedirect("/");
             return false;
         }else {
             for (Cookie c:cookies) {
